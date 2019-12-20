@@ -782,5 +782,30 @@ class ChildModel(ParentModel):
 	ordering = []
 ```
 
+##### Inheritance and reverse relations
 
+다중 테이블 상속은 암시적으로 OneToOneField를 사용하여 부모와 자식을 연결하기 때문에 위의 예와 같이 상위에서 하위로 이동할 수 있다. 그러나 이 경우 related-name의 값으로 ForeignKey 및 ManyToManyField 관계에 대한 기본 값을 사용한다. 이러한 과계 유형들을 부모 모델의 하위 클래스에 배치하는 경우 해당 필드 각각에 반드시 related_name속성을 지정해야 한다. 이를 잊어버리면 Django는 유효성 검사 오류를 발생시킨다.
+
+예를 들어 위의 Place 클래스에서 ManyToManyField를 사용하는 다른 하위 클래스를 만들어보자.
+
+ ```python
+class Supplier(Place):
+	customers = models.ManyToManyField(Place)
+ ```
+
+결과는 다음과 같은 에러를 나타낸다.
+
+```python
+Reverse query name for 'Supplier.customers' clashes with reverse query
+name for 'Supplier.place_ptr'.
+
+HINT: Add or change a related_name argument to the definitionfor
+'Supplier.customers' or 'Supplier.place_ptr'.
+```
+
+customers_name 필드에 related_name을 추가하면 models.ManyToManyField(Place, related_name='provider'에서 발생한 오류가 해결된다.
+
+##### Specifying the parent link field
+
+앞서 언급했든이 Django는 자동적으로 자식 클래스를 임의의 추상이 아닌 부모 모델에 연결하는 OneToOneField를 만든다. 부모에게 다시 연결되는 속성의 이름을 제어하려는 경우 고유한 OneToOneField를 만들고 parent_link=True로 설정하여 해당 필드가 부모 클래스에 대한 링크임을 나타낼 수 있다.
 
