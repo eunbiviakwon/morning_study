@@ -20,7 +20,7 @@ class Person(models.Model):
     last_name = models.CharField(max_length=30)
 ```
 
-`first_name`과 `last_name`은 모델의 필드. 각각의 필드는 클래스의 속성을 나타내며, 데이터베이스의 컬럽에 매핑됨
+`first_name`과 `last_name`은 모델의 필드. 각각의 필드는 클래스의 속성을 나타내며, 데이터베이스의 컬럼에 매핑됨
 
 위의 `Person`모델은 아래와 같은 데이터테이블을 만듦
 
